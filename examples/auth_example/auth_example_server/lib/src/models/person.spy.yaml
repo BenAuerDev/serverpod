@@ -1,0 +1,4 @@
+class: Person
+fields:
+    name: String
+    age: int 

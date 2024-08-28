@@ -39,8 +39,17 @@ abstract class CodeGenerator {
 }
 
 extension GenerateCode on Library {
-  String generateCode() {
-    var code = accept(DartEmitter.scoped(useNullSafetySyntax: true)).toString();
+  String generateCode([bool? scoped]) {
+    var code = accept(DartEmitter(useNullSafetySyntax: true)).toString();
+    // String code;
+
+    // if (scoped == true) {
+    //   code = accept(DartEmitter.scoped(useNullSafetySyntax: true)).toString();
+    // } else {
+    //   code = accept(DartEmitter(useNullSafetySyntax: true)).toString();
+    // }
+    // code = accept(DartEmitter(useNullSafetySyntax: true)).toString();
+
     try {
       return DartFormatter().format('''
 /* AUTOMATICALLY GENERATED CODE DO NOT MODIFY */

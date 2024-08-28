@@ -18,7 +18,8 @@ class DartServerCodeGenerator extends CodeGenerator {
       serverCode: true,
       config: config,
     );
-    return {
+
+    var generatedFiles = {
       for (var protocolFile in models)
         p.joinAll([
           ...config.generatedServeModelPathParts,
@@ -28,6 +29,8 @@ class DartServerCodeGenerator extends CodeGenerator {
             .generateModelLibrary(protocolFile)
             .generateCode(),
     };
+
+    return generatedFiles;
   }
 
   @override

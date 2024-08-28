@@ -211,6 +211,14 @@ class Restrictions {
     return [];
   }
 
+  List<SourceSpanSeverityException> validateExtendsClassKey(
+    String parentNodeName,
+    dynamic extendsClass,
+    SourceSpan? span,
+  ) {
+    return [];
+  }
+
   List<SourceSpanSeverityException> validateTableName(
     String parentNodeName,
     dynamic tableName,
