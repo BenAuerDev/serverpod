@@ -11,13 +11,12 @@
 import 'package:serverpod/serverpod.dart' as _i1;
 
 /// Represents a chat channel.
-abstract class Channel extends _i1.TableRow
-    implements _i1.ProtocolSerialization {
+abstract class Channel implements _i1.TableRow, _i1.ProtocolSerialization {
   Channel._({
     int? id,
     required this.name,
     required this.channel,
-  }) : super(id);
+  }) : super();
 
   factory Channel({
     int? id,
@@ -124,6 +123,9 @@ class _ChannelImpl extends Channel {
       channel: channel ?? this.channel,
     );
   }
+
+  @override
+  int? id;
 }
 
 class ChannelTable extends _i1.Table {
