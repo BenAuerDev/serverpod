@@ -1,0 +1,6 @@
+class: Apfel
+table: apfel_table
+fields: 
+    apfelId: int
+    color: String
+    taste: String

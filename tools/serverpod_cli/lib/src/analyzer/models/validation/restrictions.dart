@@ -225,14 +225,14 @@ class Restrictions {
       ];
     }
 
-    if (documentContents['table'] != null) {
-      return [
-        SourceSpanSeverityException(
-          'The "extends" property cannot be used on a class with a table definition.',
-          span,
-        )
-      ];
-    }
+    // if (documentContents['table'] != null) {
+    //   return [
+    //     SourceSpanSeverityException(
+    //       'The "extends" property cannot be used on a class with a table definition.',
+    //       span,
+    //     )
+    //   ];
+    // }
 
     return [];
   }
@@ -262,14 +262,14 @@ class Restrictions {
       ];
     }
 
-    if (baseClass is ClassDefinition && baseClass.tableName != null) {
-      return [
-        SourceSpanSeverityException(
-          'A base class cannot have a table definition. Please remove the "table" property from the class "$baseClassName".',
-          span,
-        )
-      ];
-    }
+    // if (baseClass is ClassDefinition && baseClass.tableName != null) {
+    //   return [
+    //     SourceSpanSeverityException(
+    //       'A base class cannot have a table definition. Please remove the "table" property from the class "$baseClassName".',
+    //       span,
+    //     )
+    //   ];
+    // }
 
     return [];
   }

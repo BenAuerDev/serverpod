@@ -52,7 +52,8 @@ class SerializableModelLibraryGenerator {
       config: config,
     );
 
-    var baseClassFields = baseClass?.fields ?? [];
+    var baseClassFields =
+        baseClass?.fields.where((element) => element.name != 'id') ?? [];
 
     return Library(
       (libraryBuilder) {
@@ -181,8 +182,8 @@ class SerializableModelLibraryGenerator {
       }
 
       if (serverCode && tableName != null) {
-        classBuilder.extend =
-            refer('TableRow', 'package:serverpod/serverpod.dart');
+        classBuilder.implements
+            .add(refer('TableRow', 'package:serverpod/serverpod.dart'));
 
         classBuilder.fields.addAll([
           _buildModelClassTableField(className),
@@ -191,6 +192,44 @@ class SerializableModelLibraryGenerator {
         classBuilder.fields.add(_buildModelClassDBField(className));
 
         classBuilder.methods.add(_buildModelClassTableGetter());
+
+        if (isBaseClass) {
+          classBuilder.methods.addAll([
+            Method(
+              (m) => m
+                ..name = 'id'
+                ..type = MethodType.getter
+                ..annotations.add(refer('override'))
+                ..returns = refer('int?')
+                ..body = const Code('''
+                  return id;
+                ''')
+                ..requiredParameters.add(
+                  Parameter(
+                    (p) => p
+                      ..name = 'id'
+                      ..type = refer('int?'),
+                  ),
+                ),
+            ),
+            Method(
+              (m) => m
+                ..name = 'id'
+                ..type = MethodType.setter
+                ..annotations.add(refer('override'))
+                ..body = const Code('''
+                  id = id;
+                ''')
+                ..requiredParameters.add(
+                  Parameter(
+                    (p) => p
+                      ..name = 'id'
+                      ..type = refer('int?'),
+                  ),
+                ),
+            ),
+          ]);
+        }
       } else {
         classBuilder.implements
             .add(refer('SerializableModel', serverpodUrl(serverCode)));
@@ -207,7 +246,8 @@ class SerializableModelLibraryGenerator {
         classDefinition.subDirParts,
       ));
 
-      var baseClassFields = baseClass?.fields ?? [];
+      var baseClassFields =
+          baseClass?.fields.where((element) => element.name != 'id') ?? [];
 
       classBuilder.constructors.addAll([
         _buildModelClassConstructor(
@@ -291,6 +331,13 @@ class SerializableModelLibraryGenerator {
           _buildModelImplClassConstructor(classDefinition, fields, tableName),
         )
         ..methods.add(_buildCopyWithMethod(classDefinition, fields, false));
+
+      if (classDefinition.extendsClass == null && tableName != null) {
+        classBuilder.fields.add(Field((f) => f
+          ..name = 'id'
+          ..type = refer('int?')
+          ..annotations.add(refer('override'))));
+      }
     });
   }
 
@@ -416,7 +463,8 @@ class SerializableModelLibraryGenerator {
     List<SerializableModelFieldDefinition> fields,
     ClassDefinition? baseClass,
   ) {
-    var baseClassFields = baseClass?.fields ?? [];
+    var baseClassFields =
+        baseClass?.fields.where((element) => element.name != 'id') ?? [];
 
     return Method((methodBuilder) {
       if (baseClass != null) {
@@ -1003,7 +1051,7 @@ class SerializableModelLibraryGenerator {
       }
 
       if (serverCode && tableName != null) {
-        c.initializers.add(refer('super').call([refer('id')]).code);
+        // c.initializers.add(refer('super').call([refer('id')]).code);
       }
     });
   }
@@ -1060,7 +1108,8 @@ class SerializableModelLibraryGenerator {
     required bool setAsToThis,
     ClassDefinition? baseClass,
   }) {
-    var baseClassFields = baseClass?.fields ?? [];
+    var baseClassFields =
+        baseClass?.fields.where((element) => element.name != 'id') ?? [];
 
     return [...baseClassFields, ...fields]
         .where((field) => field.shouldIncludeField(serverCode))
@@ -1176,7 +1225,7 @@ class SerializableModelLibraryGenerator {
       return Parameter(
         (p) => p
           ..named = true
-          ..type = type
+          ..type = field.name == 'id' ? const Reference('Object?') : type
           ..name = field.name,
       );
     }).toList();

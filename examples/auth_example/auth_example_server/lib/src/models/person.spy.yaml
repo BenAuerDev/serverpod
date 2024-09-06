@@ -1,0 +1,5 @@
+class: Person
+table: person_table
+fields: 
+    name: String
+    age: int

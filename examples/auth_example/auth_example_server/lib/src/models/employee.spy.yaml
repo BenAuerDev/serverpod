@@ -1,0 +1,5 @@
+class: Employee
+# table: employee_table
+extends: Person
+fields: 
+    employeeId: int
