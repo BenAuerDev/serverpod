@@ -354,10 +354,8 @@ class Restrictions {
 
     var errors = <SourceSpanSeverityException>[];
 
-    var implementedInterfacesList = implementedInterfaceNames
-        .split(',')
-        .map((name) => name.trim())
-        .toList();
+    var implementedInterfacesList =
+        convertCommaSeparatedList(implementedInterfaceNames);
 
     var duplicates = _findDuplicateNames(implementedInterfacesList);
     errors.addAll(
@@ -1205,7 +1203,7 @@ class Restrictions {
     if (definition is! ModelClassDefinition) return [];
 
     var fields = definition.fieldsIncludingInherited;
-    var indexFields = convertIndexList(content);
+    var indexFields = convertCommaSeparatedList(content);
 
     var validDatabaseFieldNames = fields
         .where((field) => field.shouldPersist)
